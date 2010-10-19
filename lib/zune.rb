@@ -1,3 +1,28 @@
+# Copyright (c) 2010 Kerry R. Wilson
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+#
+# Author: Kerry R. Wilson <kwilson@goodercode.com>
+# Homepage: http://github.com/webdevwilson/ruby-zune
+
+
+require 'net/http'
 require 'xml/mapping'
 
 module Zune
@@ -26,18 +51,34 @@ module Zune
   class Album; end;
   class Artist; end;
   class Track; end;
-  
+
+  ZUNE_URL = 'http://social.zune.net/zcard/usercardservice.ashx?zunetag='
+
+  # Used to retrieve Zune user data.
+  # ZuneCard.for zune_tag
   class ZuneCard
+
+    def self.for(zune_tag)
+
+      # get text
+      url = URI.parse("#{ZUNE_URL}#{zune_tag}")
+      req = Net::HTTP::Get.new(url.request_uri)
+      res = Net::HTTP.start(url.host, url.port) do |http|
+        http.request(req)
+      end
+      xml = REXML::Document.new(res.body)
+      ZuneCard.load_from_xml xml.root
+    end
 
     include XML::Mapping
 
     # simple properties
     [:id, :label, :first_name, :status].each do |name|
-      text_node name, "user/#{name.to_node_name}", :default_value => nil
+      text_node name, "user/#{name.to_node_name}"
     end
 
     [:name, :location, :bio, :total_plays, :user_id].each do |name|
-      text_node name, "user/manifest/userData/#{name.to_node_name}", :default_value => nil
+      text_node name, "user/manifest/userData/#{name.to_node_name}"
     end
     
     # images
@@ -81,8 +122,8 @@ module Zune
 
     include XML::Mapping
 
-     [ :id, :label, :release_time, :url ].each do |name|
-       text_node name, name.to_node_name, :default_value => nil
+    [ :id, :label, :release_time, :url ].each do |name|
+      text_node name, name.to_node_name, :default_value => nil
     end
 
     [ :album_cover_large, :album_cover_small ].each do |format|
