@@ -1,3 +1,6 @@
-== ruby-zune
+It's simple
+-------------------------------------------------------------------
+gem install goodercode-zune
 
-You should document your project here.
+
+Zune::ZuneCard.for('NoogaGamer')
