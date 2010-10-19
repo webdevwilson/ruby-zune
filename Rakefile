@@ -11,11 +11,11 @@ require 'rake/rdoctask'
 require 'rake/testtask'
 
 spec = Gem::Specification.new do |s|
-  s.name = 'ruby-zune'
-  s.version = '0.0.1'
+  s.name = 'goodercode-zune'
+  s.version = '0.2'
   s.has_rdoc = true
   s.extra_rdoc_files = ['README', 'LICENSE']
-  s.summary = 'A Ruby API for accessing Zune data'
+  s.summary = 'A Ruby API for accessing Zune user data'
   s.description = s.summary
   s.author = 'Kerry R Wilson'
   s.email = 'kwilson@goodercode.com'
