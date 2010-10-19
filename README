@@ -1,6 +1,32 @@
-It's simple
--------------------------------------------------------------------
+===================================================================================================
+Install:
+===================================================================================================
 gem install goodercode-zune
 
+===================================================================================================
+Usage:
+===================================================================================================
+# the following call creates an object graph of play information
+zune_card = Zune::ZuneCard.for('NoogaGamer')
 
-Zune::ZuneCard.for('NoogaGamer')
+===================================================================================================
+Fields:
+===================================================================================================
+ZuneCard defines the following fields:
+    * id
+    * label
+    * first_name
+    * status
+    * location
+    * bio
+    * total_plays
+    * user_id
+    * tile_big (url)
+    * tile_small (url)
+    * background_small (url)
+    * background_large (url)
+    * badges (Badge[])
+    * following (Artist[])
+    * favs (Track[])
+    * recent_spins (Track[])
+    * most_played (Artist[])
